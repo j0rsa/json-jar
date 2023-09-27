@@ -22,7 +22,9 @@ jobs:
           target: ./json-jar
 
       - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        uses: docker/login-action@2
+        env:
+          REGISTRY: ghcr.io
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
