@@ -3,6 +3,11 @@ use serde_json::Value;
 use std::io::Write;
 use std::sync::Mutex;
 
+#[get("/health")]
+async fn health() -> impl Responder {
+    HttpResponse::Ok().body("OK")
+}
+
 #[get("/raw")]
 async fn raw(payload: web::Json<Value>) -> impl Responder {
     match serde_json::to_string_pretty(&payload) {
@@ -81,8 +86,9 @@ async fn main() -> std::io::Result<()> {
             .service(raw)
             .app_data(config.clone())
             .service(csv)
+            .service(health)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("0.0.0.0", 8080))?
     .run()
     .await
 }
