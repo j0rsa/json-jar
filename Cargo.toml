@@ -18,3 +18,8 @@ log = "0.4.17"
 [dev-dependencies]
 env_logger = "0.10.0"
 dotenvy = "0.15.5"
+
+[profile.release]
+opt-level = "z"  # Optimize for size.
+strip = true  # Automatically strip symbols from the binary.
+lto = true # Perform link-time optimizations.
