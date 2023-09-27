@@ -19,7 +19,7 @@ jobs:
       - name: Copy file
         uses: canastro/copy-action@0.0.2
         with:
-          source: target/release/json-jar
+          source: target/x86_64-unknown-linux-musl/release/json-jar
           target: ./json-jar
 
       - name: Log in to the Container registry
@@ -39,6 +39,11 @@ jobs:
           IMAGE_NAME: ${{ github.repository }}
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            latest
+            ${{ github.sha }}
+            type=ref,event=branch
+            type=ref,event=tag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
