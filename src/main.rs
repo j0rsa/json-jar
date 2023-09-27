@@ -80,6 +80,7 @@ fn get_key(json: &Option<Value>, key_chain: Vec<String>) -> Option<String> {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
     let config = web::Data::new(Mutex::new(CsvConfig::from_env()));
     HttpServer::new(move || {
         App::new()

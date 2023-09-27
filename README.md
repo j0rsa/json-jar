@@ -12,3 +12,7 @@ configuration is formed from the following environment variables:
 - `DELIMITER` - the delimiter to use in the csv file. By default `,`
 - `CSV_FILE` - the optional path to the csv file to write to. By default the received line will be only logged
 - `RUST_LOG` - the log level. By default `info`
+
+## quick test
+
+    docker run -it --rm -p 8080:8080 -e COLUMNS=1 -e COLUMN_0=test ghcr.io/j0rsa/json-jar
