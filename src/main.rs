@@ -2,7 +2,6 @@ use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use serde_json::Value;
 use std::io::Write;
 use std::sync::Mutex;
-use log::log;
 
 #[get("/raw")]
 async fn raw(payload: web::Json<Value>) -> impl Responder {

@@ -1,9 +1,9 @@
 [package]
-name = "json_jar"
+name = "json-jar"
 version = "0.0.1"
 authors = ["red <red.avtovo@gmail.com>"]
 edition = "2021"
-repository = "https://github.com/j0rsa/jsonJar"
+repository = "https://github.com/j0rsa/json-jar"
 license = "MIT"
 readme = "README.md"
 description = "Keep your json requests in file"
