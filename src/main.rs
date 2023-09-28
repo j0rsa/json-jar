@@ -96,6 +96,8 @@ fn get_key(json: &Option<Value>, key_chain: Vec<String>) -> Option<String> {
 async fn main() -> std::io::Result<()> {
     env_logger::init();
     let config = web::Data::new(Mutex::new(CsvConfig::from_env()));
+    let port = std::env::var("PORT").unwrap_or("8080".to_string());
+    let port = port.parse::<u16>().unwrap();
     HttpServer::new(move || {
         App::new()
             .service(raw)
@@ -104,7 +106,7 @@ async fn main() -> std::io::Result<()> {
             .service(csv_get)
             .service(health)
     })
-    .bind(("0.0.0.0", 8080))?
+    .bind(("0.0.0.0", port))?
     .run()
     .await
 }

@@ -14,6 +14,7 @@ configuration is formed from the following environment variables:
 - `DELIMITER` - the delimiter to use in the csv file. By default `,`
 - `CSV_FILE` - the optional path to the csv file to write to. By default the received line will be only logged
 - `RUST_LOG` - the log level. By default `info`
+- `PORT` - the port to listen on. By default `8080`
 
 ## quick test
 
