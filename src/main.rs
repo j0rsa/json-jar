@@ -1,6 +1,6 @@
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder, post};
 use serde_json::Value;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::sync::Mutex;
 
 #[get("/health")]
@@ -8,7 +8,7 @@ async fn health() -> impl Responder {
     HttpResponse::Ok().body("OK")
 }
 
-#[get("/raw")]
+#[post("/raw")]
 async fn raw(payload: web::Json<Value>) -> impl Responder {
     match serde_json::to_string_pretty(&payload) {
         Ok(v) => {
@@ -19,8 +19,8 @@ async fn raw(payload: web::Json<Value>) -> impl Responder {
     }
 }
 
-#[get("/csv")]
-async fn csv(payload: web::Json<Value>, config: web::Data<Mutex<CsvConfig>>) -> impl Responder {
+#[post("/csv")]
+async fn csv_write(payload: web::Json<Value>, config: web::Data<Mutex<CsvConfig>>) -> impl Responder {
     let config = config.lock().unwrap();
     let line = get_csv_line(&Some(payload.0), &config);
     match line {
@@ -41,6 +41,20 @@ async fn csv(payload: web::Json<Value>, config: web::Data<Mutex<CsvConfig>>) -> 
             }
             HttpResponse::Ok().body("OK")
         }
+    }
+}
+
+#[get("/csv")]
+async fn csv_get(config: web::Data<Mutex<CsvConfig>>) -> impl Responder {
+    let config = config.lock().unwrap();
+    match config.file {
+        Some(ref file) => {
+            let mut file = std::fs::OpenOptions::new().read(true).open(file).unwrap();
+            let mut contents = String::new();
+            file.read_to_string(&mut contents).unwrap();
+            HttpResponse::Ok().body(contents)
+        }
+        None => HttpResponse::Ok().body(""),
     }
 }
 
@@ -86,7 +100,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(raw)
             .app_data(config.clone())
-            .service(csv)
+            .service(csv_write)
+            .service(csv_get)
             .service(health)
     })
     .bind(("0.0.0.0", 8080))?

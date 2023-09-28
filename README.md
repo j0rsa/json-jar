@@ -2,8 +2,10 @@
 api service that stores full or part of the rest json payloads as a file
 
 send a json payload to:
-- `/raw` to log a pretty printed json payload
-- `/csv` to write a json payload to csv file based on the config
+- POST `/raw` to log a pretty printed json payload
+- POST `/csv` to write a json payload to csv file based on the config
+- GET `/csv` to get a csv file content
+- GET `/health` to get a health status
 
 ## config
 configuration is formed from the following environment variables:
