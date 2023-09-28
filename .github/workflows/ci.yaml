@@ -31,6 +31,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get short SHA
+        id: short-sha
+        run: echo "::set-output name=sha::$(echo ${GITHUB_SHA::8})"
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
@@ -42,6 +46,7 @@ jobs:
           tags: |
             latest
             ${{ github.sha }}
+            ${{ steps.short-sha.outputs.sha }}
             type=ref,event=branch
             type=ref,event=tag
 

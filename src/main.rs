@@ -58,11 +58,10 @@ async fn csv_get(config: web::Data<Mutex<CsvConfig>>) -> impl Responder {
                 Err(_) => {
                     HttpResponse::Ok().body("")
                 }
-            };
+            }
         }
         None => HttpResponse::Ok().body(""),
     }
-
 }
 
 fn get_csv_line(json: &Option<Value>, config: &CsvConfig) -> Result<String, String> {
