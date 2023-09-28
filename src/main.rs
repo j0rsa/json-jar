@@ -49,13 +49,20 @@ async fn csv_get(config: web::Data<Mutex<CsvConfig>>) -> impl Responder {
     let config = config.lock().unwrap();
     match config.file {
         Some(ref file) => {
-            let mut file = std::fs::OpenOptions::new().read(true).open(file).unwrap();
-            let mut contents = String::new();
-            file.read_to_string(&mut contents).unwrap();
-            HttpResponse::Ok().body(contents)
+            match std::fs::OpenOptions::new().read(true).open(file) {
+                Ok(mut file) => {
+                    let mut contents = String::new();
+                    file.read_to_string(&mut contents).unwrap();
+                    HttpResponse::Ok().body(contents)
+                }
+                Err(_) => {
+                    HttpResponse::Ok().body("")
+                }
+            };
         }
         None => HttpResponse::Ok().body(""),
     }
+
 }
 
 fn get_csv_line(json: &Option<Value>, config: &CsvConfig) -> Result<String, String> {
